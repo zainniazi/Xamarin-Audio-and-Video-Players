@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:helpers="clr-namespace:Players.Helpers" x:Class="Players.Helpers.AudioPlayerView">
+    <ContentView.Content>
+        <StackLayout HeightRequest="200" VerticalOptions="Start" HorizontalOptions="FillAndExpand" BackgroundColor="#d65050">
+            <StackLayout VerticalOptions="EndAndExpand" HorizontalOptions="CenterAndExpand">
+                <Image HeightRequest="80" WidthRequest="80" Source="AudioWithBackground">
+                </Image>
+            </StackLayout>
+            <StackLayout HeightRequest="40" Orientation="Horizontal" VerticalOptions="EndAndExpand" Padding="6">
+                <Button VerticalOptions="Center" Image="{Binding PlayPauseIcon}" HeightRequest="30" WidthRequest="30" HorizontalOptions="Start" Command="{Binding PlayPauseCommand}">
+                </Button>
+                <Label VerticalOptions="Center" TextColor="White" FontSize="Small" Text="{Binding CurrentPosition}">
+                </Label>
+                <helpers:AudioSlider IsPressed="{Binding IsSliderPressed}" IsEnabled="{Binding IsEnabled}" Value="{Binding SliderCurrentValue}" Minimum="0.0" Maximum="{Binding SliderMaxValue}" VerticalOptions="Center" HorizontalOptions="FillAndExpand">
+                </helpers:AudioSlider>
+                <Label VerticalOptions="Center" TextColor="White" FontSize="Small" Text="{Binding Length}">
+                </Label>
+            </StackLayout>
+        </StackLayout>
+    </ContentView.Content>
+</ContentView>

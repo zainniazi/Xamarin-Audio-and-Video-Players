@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:helpers="clr-namespace:Players.Helpers" x:Class="Players.Views.AudioPlayerPage">
+    <ContentPage.Content>
+        <StackLayout>
+            <helpers:AudioPlayerView HorizontalOptions="FillAndExpand">
+            </helpers:AudioPlayerView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
