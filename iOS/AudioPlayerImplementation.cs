@@ -17,36 +17,30 @@ namespace Players.iOS
         #endregion
 
         #region LocalVariables
-        Constants.ContentType ContentType;
-        bool HasEnded;
-        double TotalLength;
+        Constants.ContentType _contentType;
+        bool _hasEnded;
+        double _totalLength;
 
         AVPlayer _player;
-        NSUrl soundUrl;
-        NSObject TimeObserver;
+        NSUrl _soundUrl;
+        NSObject _timeObserver;
         #endregion
 
         public void Stop()
         {
-            if (_player != null)
-            {
-                _player.Stop();
-            }
+            _player?.Stop();
         }
 
         public void Play()
         {
-            if (ContentType == Constants.ContentType.Remote)
-                soundUrl = new NSUrl("https://swaong.azurewebsites.net/Uploads/messagedd58c21a-d4af-460d-9ae5-8e966b017a54-20170705132008aac-msg..wav");
-            else
-                soundUrl = new NSUrl("A-Team.wav", false);
-            if (!HasEnded && _player != null)
+            _soundUrl = _contentType == Constants.ContentType.Remote ? new NSUrl("https://swaong.azurewebsites.net/Uploads/messagedd58c21a-d4af-460d-9ae5-8e966b017a54-20170705132008aac-msg..wav") : new NSUrl("A-Team.wav", false);
+            if (!_hasEnded && _player != null)
             {
                 _player.Play();
             }
             else
             {
-                HasEnded = false;
+                _hasEnded = false;
                 // Any existing sound?
                 if (_player != null)
                 {
@@ -58,9 +52,9 @@ namespace Players.iOS
                 {
                     _player = new AVPlayer();
                 }
-                _player = AVPlayer.FromUrl(soundUrl);
-                TotalLength = _player.CurrentItem.Asset.Duration.Seconds;
-                SoundLength?.Invoke(this, TotalLength);
+                _player = AVPlayer.FromUrl(_soundUrl);
+                _totalLength = _player.CurrentItem.Asset.Duration.Seconds;
+                SoundLength?.Invoke(this, _totalLength);
                 _player.Play();
                 // Observe Time of Audio
                 StartTimeObserver();
@@ -70,15 +64,15 @@ namespace Players.iOS
 
         void StartTimeObserver()
         {
-            TimeObserver = _player
+            _timeObserver = _player
                 .AddPeriodicTimeObserver(CoreMedia.CMTime.FromSeconds(1.0 / 60.0, Constants.NSEC_PER_SEC), null, (obj) =>
                          {
                              if (_player != null)
                              {
                                  SliderValueChange?.Invoke(new object(), obj.Seconds);
-                                 if (obj.Seconds >= TotalLength)
+                                 if (obj.Seconds >= _totalLength)
                                  {
-                                     HasEnded = true;
+                                     _hasEnded = true;
                                      HasEndedEvent?.Invoke(this, new EventArgs());
                                      EndTimeObserver();
                                  }
@@ -93,15 +87,12 @@ namespace Players.iOS
 
         void EndTimeObserver()
         {
-            TimeObserver?.Dispose();
+            _timeObserver?.Dispose();
         }
 
         public void Pause()
         {
-            if (_player != null)
-            {
-                _player.Pause();
-            }
+            _player?.Pause();
         }
 
         public void GoToTime(double sec)
@@ -118,15 +109,12 @@ namespace Players.iOS
 
         public void Dispose()
         {
-            if (_player != null)
-            {
-                _player.Dispose();
-            }
+            _player?.Dispose();
         }
 
         public void SetContentType(Constants.ContentType type)
         {
-            ContentType = type;
+            _contentType = type;
         }
     }
 }

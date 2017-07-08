@@ -6,10 +6,10 @@ namespace Players.iOS.Helpers
 {
 	public static class Extensions
 	{
-		public static void Stop(this AVPlayer _player)
+		public static void Stop(this AVPlayer player)
 		{
-			_player?.Pause();
-			_player?.Seek(CoreMedia.CMTime.FromSeconds(0.0, Constants.NSEC_PER_SEC));
+			player?.Pause();
+			player?.Seek(CoreMedia.CMTime.FromSeconds(0.0, Constants.NSEC_PER_SEC));
 		}
 	}
 }

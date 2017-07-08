@@ -1,12 +1,10 @@
 ﻿using System;
 using AVFoundation;
-using AVKit;
 using CoreGraphics;
 using Foundation;
 using Players.Helpers;
 using Players.iOS;
 using Players.iOS.Helpers;
-using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
@@ -20,10 +18,10 @@ namespace Players.iOS
         AVPlayerItem _playerItem;
         AVPlayer _player;
         AVPlayerLayer _playerLayer;
-        NSObject TimeObserver;
-        bool HasEnded;
-        double TotalLength;
-        Constants.ContentType ContentType;
+        NSObject _timeObserver;
+        bool _hasEnded;
+        double _totalLength;
+        Constants.ContentType _contentType;
 
         protected override void OnElementChanged(ElementChangedEventArgs<View> e)
         {
@@ -38,8 +36,8 @@ namespace Players.iOS
                 _player = new AVPlayer(_playerItem);
                 _playerLayer = AVPlayerLayer.FromPlayer(_player);
 
-                TotalLength = _player.CurrentItem.Asset.Duration.Seconds;
-                parentPlayer.SoundLength?.Invoke(this, TotalLength);
+                _totalLength = _player.CurrentItem.Asset.Duration.Seconds;
+                parentPlayer.SoundLength?.Invoke(this, _totalLength);
 
                 parentPlayer.Play += (sender, innere) =>
                 {
@@ -75,15 +73,15 @@ namespace Players.iOS
 
         void StartTimeObserver(VideoPlayer parentPlayer)
         {
-            TimeObserver = _player
+            _timeObserver = _player
                 .AddPeriodicTimeObserver(CoreMedia.CMTime.FromSeconds(1.0 / 60.0, Constants.NSEC_PER_SEC), null, (obj) =>
                          {
                              if (_player != null)
                              {
                                  parentPlayer?.SliderValueChange?.Invoke(this, obj.Seconds);
-                                 if (obj.Seconds >= TotalLength)
+                                 if (obj.Seconds >= _totalLength)
                                  {
-									 HasEnded = true;
+									 _hasEnded = true;
 									 _player.SeekAsync(CoreMedia.CMTime.FromSeconds(0, Constants.NSEC_PER_SEC));
                                      parentPlayer?.HasEndedEvent?.Invoke(this, new EventArgs());
                                      EndTimeObserver();
@@ -99,7 +97,7 @@ namespace Players.iOS
 
         void EndTimeObserver()
         {
-            TimeObserver?.Dispose();
+            _timeObserver?.Dispose();
         }
 
         protected override void Dispose(bool disposing)
@@ -109,7 +107,7 @@ namespace Players.iOS
             _playerLayer?.Dispose();
             _playerItem?.Dispose();
             _asset?.Dispose();
-            TimeObserver?.Dispose();
+            _timeObserver?.Dispose();
         }
     }
 }

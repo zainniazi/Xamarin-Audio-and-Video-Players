@@ -9,11 +9,8 @@ namespace Players.Helpers
             BindableProperty.Create("IsPressed", typeof(bool), typeof(MediaSlider), default(bool), BindingMode.TwoWay);
         public bool IsPressed
         {
-            get { return (bool)GetValue(IsPressedProperty); }
-            set
-            {
-                SetValue(IsPressedProperty, value);
-            }
+            get => (bool)GetValue(IsPressedProperty);
+            set => SetValue(IsPressedProperty, value);
         }
     }
 }

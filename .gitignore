@@ -3,3 +3,7 @@
 ################################################################################
 
 /packages
+/Droid/obj/Debug
+/Droid/obj/Debug
+/iOS/obj/iPhoneSimulator/Debug
+/Players/obj/Debug
