@@ -12,11 +12,11 @@ namespace Players.Views
             InitializeComponent();
         }
 
-        void Audio_Clicked(object sender, System.EventArgs e)
+        void Audio_Clicked(object sender, EventArgs e)
         {
             Navigation?.PushAsync(new AudioPlayerPage());
         }
-		void Video_Clicked(object sender, System.EventArgs e)
+		void Video_Clicked(object sender, EventArgs e)
 		{
             Navigation?.PushAsync(new VideoPlayerPage());
 		}

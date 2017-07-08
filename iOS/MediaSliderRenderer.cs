@@ -4,12 +4,12 @@ using Players.iOS;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
-[assembly: ExportRenderer(typeof(AudioSlider), typeof(AudioSliderRenderer))]
+[assembly: ExportRenderer(typeof(MediaSlider), typeof(MediaSliderRenderer))]
 namespace Players.iOS
 {
-    public class AudioSliderRenderer : SliderRenderer
+    public class MediaSliderRenderer : SliderRenderer
     {
-        AudioSlider MainSlider => (AudioSlider)Element;
+        MediaSlider MainSlider => (MediaSlider)Element;
         protected override void OnElementChanged(ElementChangedEventArgs<Slider> e)
         {
             base.OnElementChanged(e);

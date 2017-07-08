@@ -41,6 +41,9 @@
     <EmbeddedResource Include="Helpers\AudioPlayerView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Include="Helpers\VideoPlayerView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">
@@ -54,17 +57,21 @@
     </Compile>
     <Compile Include="ViewModels\BaseNavigationViewModel.cs" />
     <Compile Include="Helpers\Constants.cs" />
-    <Compile Include="Helpers\AudioSlider.cs" />
+    <Compile Include="Helpers\MediaSlider.cs" />
     <Compile Include="Views\AudioPlayerPage.xaml.cs">
       <DependentUpon>AudioPlayerPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\VideoPlayerPage.xaml.cs">
       <DependentUpon>VideoPlayerPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\VideoPlayerView.cs" />
     <Compile Include="Helpers\AudioPlayerView.xaml.cs">
       <DependentUpon>AudioPlayerView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\VideoPlayerView.xaml.cs">
+      <DependentUpon>VideoPlayerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\VideoPlayer.cs" />
+    <Compile Include="ViewModels\VideoPlayerViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MvvmHelpers">

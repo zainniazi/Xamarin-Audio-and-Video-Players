@@ -3,6 +3,7 @@ using AVFoundation;
 using Foundation;
 using Players.Helpers;
 using Players.iOS;
+using Players.iOS.Helpers;
 
 [assembly: Xamarin.Forms.Dependency(typeof(AudioPlayerImplementation))]
 namespace Players.iOS
@@ -128,14 +129,4 @@ namespace Players.iOS
             ContentType = type;
         }
     }
-
-    public static class Extensions
-    {
-        public static void Stop(this AVPlayer _player)
-        {
-            _player?.Pause();
-            _player?.Seek(CoreMedia.CMTime.FromSeconds(0.0, Constants.NSEC_PER_SEC));
-        }
-    }
-
 }
