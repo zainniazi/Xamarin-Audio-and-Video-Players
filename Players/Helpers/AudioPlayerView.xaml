@@ -11,7 +11,7 @@
                 </Button>
                 <Label VerticalOptions="Center" TextColor="White" FontSize="Small" Text="{Binding CurrentPosition}">
                 </Label>
-                <helpers:MediaSlider IsPressed="{Binding IsSliderPressed}" IsEnabled="{Binding IsEnabled}" Value="{Binding SliderCurrentValue}" Minimum="0.0" Maximum="{Binding SliderMaxValue}" VerticalOptions="Center" HorizontalOptions="FillAndExpand">
+                <helpers:MediaSlider IsPressed="{Binding IsSliderPressed}" IsEnabled="{Binding IsSliderEnabled}" Value="{Binding SliderCurrentValue}" Minimum="0.0" Maximum="{Binding SliderMaxValue}" VerticalOptions="Center" HorizontalOptions="FillAndExpand">
                 </helpers:MediaSlider>
                 <Label VerticalOptions="Center" TextColor="White" FontSize="Small" Text="{Binding Length}">
                 </Label>

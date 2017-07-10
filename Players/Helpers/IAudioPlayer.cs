@@ -3,13 +3,13 @@ namespace Players.Helpers
 {
     public interface IAudioPlayer : IDisposable
     {
-        void SetContentType(Constants.ContentType type);
+        void SetData(Constants.ContentType type, string source);
 		void Stop();
 		void Play();
 		void Pause();
         void GoToTime(double sec);
         event EventHandler<double> SliderValueChange;
-		event EventHandler<double> SoundLength;
+		event EventHandler<double> HasStarted;
 		event EventHandler HasEndedEvent;
     }
 }

@@ -12,19 +12,26 @@ namespace Players.iOS
     {
         #region ParentEvents
         public event EventHandler HasEndedEvent;
-        public event EventHandler<double> SoundLength;
+        public event EventHandler<double> HasStarted;
         public event EventHandler<double> SliderValueChange;
         #endregion
 
         #region LocalVariables
         Constants.ContentType _contentType;
-        bool _hasEnded;
+        bool _hasEnded = true;
         double _totalLength;
 
         AVPlayer _player;
         NSUrl _soundUrl;
         NSObject _timeObserver;
         #endregion
+
+        public AudioPlayerImplementation()
+        {
+            _player = new AVPlayer(){
+                ActionAtItemEnd = AVPlayerActionAtItemEnd.None
+            };
+        }
 
         public void Stop()
         {
@@ -33,32 +40,20 @@ namespace Players.iOS
 
         public void Play()
         {
-            _soundUrl = _contentType == Constants.ContentType.Remote ? new NSUrl("https://swaong.azurewebsites.net/Uploads/messagedd58c21a-d4af-460d-9ae5-8e966b017a54-20170705132008aac-msg..wav") : new NSUrl("A-Team.wav", false);
-            if (!_hasEnded && _player != null)
+            if (!_hasEnded)
             {
                 _player.Play();
             }
             else
             {
-                _hasEnded = false;
                 // Any existing sound?
-                if (_player != null)
-                {
-                    //Stop and dispose of any background music
-                    _player.Stop();
-                    EndTimeObserver();
-                }
-                else
-                {
-                    _player = new AVPlayer();
-                }
-                _player = AVPlayer.FromUrl(_soundUrl);
+                 Stop();
+                _hasEnded = false;
                 _totalLength = _player.CurrentItem.Asset.Duration.Seconds;
-                SoundLength?.Invoke(this, _totalLength);
+                HasStarted?.Invoke(this, _totalLength);
                 _player.Play();
                 // Observe Time of Audio
                 StartTimeObserver();
-                _player.ActionAtItemEnd = AVPlayerActionAtItemEnd.None;
             }
         }
 
@@ -112,9 +107,11 @@ namespace Players.iOS
             _player?.Dispose();
         }
 
-        public void SetContentType(Constants.ContentType type)
+        public void SetData(Constants.ContentType type, string source)
         {
             _contentType = type;
+            _soundUrl = _contentType == Constants.ContentType.Remote ? new NSUrl(source) : new NSUrl(source, false);
+            _player.ReplaceCurrentItemWithPlayerItem(AVPlayerItem.FromUrl(_soundUrl));
         }
     }
 }
