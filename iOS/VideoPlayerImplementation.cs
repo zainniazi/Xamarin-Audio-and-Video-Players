@@ -46,6 +46,7 @@ namespace Players.iOS
                         parentPlayer.SoundLength?.Invoke(this, _totalLength);
                     });
                 }));
+                videoLengthThread.Start();
 
                 parentPlayer.Play += (sender, innere) =>
                 {
