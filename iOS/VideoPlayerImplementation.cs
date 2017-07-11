@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using AVFoundation;
 using CoreGraphics;
 using Foundation;
@@ -19,29 +20,42 @@ namespace Players.iOS
         AVPlayer _player;
         AVPlayerLayer _playerLayer;
         NSObject _timeObserver;
-        bool _hasEnded;
         double _totalLength;
         Constants.ContentType _contentType;
+        Thread videoLengthThread;
 
         protected override void OnElementChanged(ElementChangedEventArgs<View> e)
         {
             base.OnElementChanged(e);
             if (e.NewElement is VideoPlayer parentPlayer)
             {
-                //Get the video
-                //bubble up to the AVPlayerLayer
-                var url = new NSUrl("http://www.androidbegin.com/tutorial/AndroidCommercial.3gp");
-                _asset = AVAsset.FromUrl(url);
-                _playerItem = new AVPlayerItem(_asset);
-                _player = new AVPlayer(_playerItem);
+                _player = new AVPlayer();
                 _playerLayer = AVPlayerLayer.FromPlayer(_player);
 
-                _totalLength = _player.CurrentItem.Asset.Duration.Seconds;
-                parentPlayer.SoundLength?.Invoke(this, _totalLength);
+                _contentType = parentPlayer.ContentType;
+                var url = _contentType == Constants.ContentType.Remote ? new NSUrl(parentPlayer.Source) : new NSUrl(parentPlayer.Source, false);
+                _asset = AVAsset.FromUrl(url);
+                _playerItem = new AVPlayerItem(_asset);
+                _player.ReplaceCurrentItemWithPlayerItem(_playerItem);
+
+                videoLengthThread = new Thread(new ThreadStart(() =>
+                {
+                    _totalLength = _player.CurrentItem.Asset.Duration.Seconds;
+                    InvokeOnMainThread(() =>
+                    {
+                        parentPlayer.SoundLength?.Invoke(this, _totalLength);
+                    });
+                }));
 
                 parentPlayer.Play += (sender, innere) =>
                 {
-					StartTimeObserver(parentPlayer);
+                    if (videoLengthThread.IsAlive)
+                    {
+                        videoLengthThread.Abort();
+                        _totalLength = _player.CurrentItem.Asset.Duration.Seconds;
+                        parentPlayer.SoundLength?.Invoke(this, _totalLength);
+                    }
+                    StartTimeObserver(parentPlayer);
                     _player.Play();
                 };
 
@@ -60,7 +74,6 @@ namespace Players.iOS
                 {
                     _player.SeekAsync(CoreMedia.CMTime.FromSeconds(sec, Constants.NSEC_PER_SEC));
                 };
-
             }
         }
         public override void LayoutSubviews()
@@ -81,8 +94,7 @@ namespace Players.iOS
                                  parentPlayer?.SliderValueChange?.Invoke(this, obj.Seconds);
                                  if (obj.Seconds >= _totalLength)
                                  {
-									 _hasEnded = true;
-									 _player.SeekAsync(CoreMedia.CMTime.FromSeconds(0, Constants.NSEC_PER_SEC));
+                                     _player.SeekAsync(CoreMedia.CMTime.FromSeconds(0, Constants.NSEC_PER_SEC));
                                      parentPlayer?.HasEndedEvent?.Invoke(this, new EventArgs());
                                      EndTimeObserver();
                                  }

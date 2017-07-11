@@ -70,8 +70,8 @@
       <DependentUpon>VideoPlayerView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helpers\VideoPlayer.cs" />
-    <Compile Include="ViewModels\VideoPlayerViewModel.cs" />
     <Compile Include="ViewModels\AudioPlayerViewModel.cs" />
+    <Compile Include="ViewModels\VideoPlayerViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MvvmHelpers">

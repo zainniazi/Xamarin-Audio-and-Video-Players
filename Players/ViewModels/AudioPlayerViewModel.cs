@@ -1,6 +1,6 @@
 ﻿using Players.Helpers;
-using Players.ViewModels;
-namespace Players.iOS
+
+namespace Players.ViewModels
 {
     public class AudioPlayerViewModel : BaseNavigationViewModel
     {

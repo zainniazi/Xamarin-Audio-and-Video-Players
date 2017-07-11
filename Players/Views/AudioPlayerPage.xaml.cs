@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Players.Helpers;
-using Players.iOS;
+using Players.ViewModels;
 using Xamarin.Forms;
 
 namespace Players.Views
